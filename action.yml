@@ -20,6 +20,6 @@ runs:
 
             git add .
             git commit -m "$commit_message"
-            git push "https://x-access-token:${{ inputs.github_token }}@github.com/${{ github.repository }}.git" HEAD:main
+            git push "https://x-access-token:${{ inputs.github_token }}@github.com/${{ github.repository }}.git" HEAD:master
         else
             echo "No changes detected."

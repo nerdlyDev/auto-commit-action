@@ -1,9 +1,15 @@
 name: "Auto Commit Action"
 description: "Automatically commits and pushes changes if found."
+
 inputs:
   github_token:
     description: "GitHub token to authenticate the push"
     required: true
+
+  commit_message:
+    description: "Commit message to use"
+    required: false
+    default: "chore: auto commit changes"
 
 runs:
   using: "composite"
@@ -12,14 +18,15 @@ runs:
       shell: bash
       run: |
         if [[ -n $(git status --porcelain) ]]; then
-            echo "Changes detected. Enter commit message:"
-            read commit_message
+            echo "✅ Changes detected. Committing and pushing..."
 
             git config --global user.email "developersharma1999@gmail.com"
             git config --global user.name "nerdlyDev"
 
             git add .
-            git commit -m "$commit_message"
-            git push "https://x-access-token:${{ inputs.github_token }}@github.com/${{ github.repository }}.git" HEAD:master
+            git commit -m "${{ inputs.commit_message }}"
+
+            branch=$(git rev-parse --abbrev-ref HEAD)
+            git push "https://x-access-token:${{ inputs.github_token }}@github.com/${{ github.repository }}.git" HEAD:$branch
         else
-            echo "No changes detected."
+            echo "🟢 No changes detected. Skipping commit."

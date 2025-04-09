@@ -25,8 +25,8 @@ runs:
 
             git add .
             git commit -m "${{ inputs.commit_message }}"
+            
+            git push "https://x-access-token:${{ inputs.github_token }}@github.com/${{ github.repository }}.git" HEAD:master
 
-            branch=$(git rev-parse --abbrev-ref HEAD)
-            git push "https://x-access-token:${{ inputs.github_token }}@github.com/${{ github.repository }}.git" HEAD:$branch
         else
             echo "🟢 No changes detected. Skipping commit."
